@@ -1,6 +1,9 @@
 package game2048logic;
 
+import game2048rendering.Board;
 import game2048rendering.Side;
+import net.sf.saxon.expr.Component;
+
 import static game2048logic.MatrixUtils.rotateLeft;
 import static game2048logic.MatrixUtils.rotateRight;
 
@@ -20,6 +23,29 @@ public class GameLogic {
      */
     public static int moveTileUpAsFarAsPossible(int[][] board, int r, int c, int minR) {
         // TODO: Fill this in in tasks 2, 3, 4
+        int val = board[r][c];
+        // Nothing to move if the square is empty
+        if (val == 0) {
+            return 0;
+        }
+        // Clear the original position
+        board[r][c] = 0;
+
+        // Slide upward until we hit the minR or a non-empty square immediately above
+        int newR = r;
+        while (newR > minR && board[newR - 1][c] == 0) {
+            newR--;
+        }
+
+        // If we stopped because of a same‐valued tile, merge
+        if (newR > minR && board[newR - 1][c] == val) {
+            int mergeRow = newR - 1;
+            board[mergeRow][c] = val * 2;
+            return mergeRow + 1;
+        }
+
+        // Otherwise, place the tile at newR and report no merge
+        board[newR][c] = val;
         return 0;
     }
 
@@ -32,7 +58,14 @@ public class GameLogic {
      */
     public static void tiltColumn(int[][] board, int c) {
         // TODO: fill this in in task 5
-        return;
+        int total_row = board.length;
+        int minR = 0;
+        for(int i=0; i<total_row; i++){
+            int newR = moveTileUpAsFarAsPossible(board, i, c, minR);
+            if(newR > 0){
+                minR = newR;
+            }
+        }
     }
 
     /**
@@ -42,7 +75,11 @@ public class GameLogic {
      */
     public static void tiltUp(int[][] board) {
         // TODO: fill this in in task 6
-        return;
+        int total_column = board[0].length;
+
+        for(int i=0; i<total_column; i++){
+            tiltColumn(board, i);
+        }
     }
 
     /**
@@ -55,13 +92,21 @@ public class GameLogic {
     public static void tilt(int[][] board, Side side) {
         // TODO: fill this in in task 7
         if (side == Side.EAST) {
-            return;
+            MatrixUtils.rotateLeft(board);
+            tiltUp(board);
+            MatrixUtils.rotateRight(board);
         } else if (side == Side.WEST) {
-            return;
+            MatrixUtils.rotateRight(board);
+            tiltUp(board);
+            MatrixUtils.rotateLeft(board);
         } else if (side == Side.SOUTH) {
-            return;
+            MatrixUtils.rotateRight(board);
+            MatrixUtils.rotateRight(board);
+            tiltUp(board);
+            MatrixUtils.rotateLeft(board);
+            MatrixUtils.rotateLeft(board);
         } else {
-            return;
+            tiltUp(board);
         }
     }
 }
