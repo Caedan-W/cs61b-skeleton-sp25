@@ -197,6 +197,22 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         return false;
     }
 
+    @Override
+    public String toString() {
+//        StringBuilder returnSB = new StringBuilder("{");
+//        for (int i=0; i<size; i++) {
+//            returnSB.append(get(i));
+//            returnSB.append(",");
+//        }
+//        returnSB.append("}");
+//        return returnSB.toString();
+        List<String> listOfItems = new ArrayList<>();
+        for (T x : this) {
+            listOfItems.add(x.toString());
+        }
+        return "{" + String.join(", ", listOfItems) + "}";
+    }
+
     public static void main(String[] args) {
         ArrayDeque61B<Integer> ad1 = new ArrayDeque61B<>();
         ad1.addLast(0);
@@ -219,6 +235,8 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         ad2.addLast(2);
 
         System.out.println(ad1.equals(ad2));
+
+        System.out.println(ad1);
 
     }
 

@@ -227,6 +227,15 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         return false;
     }
 
+    @Override
+    public String toString() {
+        List<String> listOfItems = new ArrayList<>();
+        for (T x : this) {
+            listOfItems.add(x.toString());
+        }
+        return "{" + String.join(", ", listOfItems) + "}";
+    }
+
 
     public static void main(String[] args) {
         LinkedListDeque61B<Integer> lld1 = new LinkedListDeque61B<>();
@@ -250,5 +259,7 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         lld2.addLast(6);
 
         System.out.println(lld1.equals(lld2));
+
+        System.out.println(lld1);
     }
 }
