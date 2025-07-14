@@ -176,11 +176,32 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof ArrayDeque61B otherAD) {
+            if (this.size != otherAD.size) {
+                return false;
+            }
+
+            for (int i=0; i<this.size; i++) {
+                if (!this.get(i).equals(otherAD.get(i))) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public static void main(String[] args) {
-        ArrayDeque61B<Integer> ad = new ArrayDeque61B<>();
-        ad.addLast(0);
-        ad.addLast(1);
-        ad.addLast(2);
+        ArrayDeque61B<Integer> ad1 = new ArrayDeque61B<>();
+        ad1.addLast(0);
+        ad1.addLast(1);
+        ad1.addLast(2);
 
 //        Iterator<Integer> ad_seer = ad.iterator();
 //        while(ad_seer.hasNext()) {
@@ -188,9 +209,17 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 //            System.out.println(i);
 //        }
 
-        for (int i : ad) {
+        for (int i : ad1) {
             System.out.println(i);
         }
+
+        ArrayDeque61B<Integer> ad2 = new ArrayDeque61B<>();
+        ad2.addLast(0);
+        ad2.addLast(1);
+        ad2.addLast(2);
+
+        System.out.println(ad1.equals(ad2));
+
     }
 
 }

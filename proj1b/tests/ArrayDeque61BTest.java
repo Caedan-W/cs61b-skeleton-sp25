@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -171,6 +172,108 @@ public class ArrayDeque61BTest {
         ad.removeLast();
         assertThat(ad.capacity()).isEqualTo(8);
         assertThat(ad.size()).isEqualTo(3);
+    }
+
+    // ----------------- Iterator Tests -----------------
+
+    @Test
+    public void testIteratorEmpty() {
+        ArrayDeque61B<Integer> ad = new ArrayDeque61B<>();
+        Iterator<Integer> it = ad.iterator();
+        assertThat(it.hasNext()).isFalse();
+    }
+
+    @Test
+    public void testIteratorSingle() {
+        ArrayDeque61B<String> ad = new ArrayDeque61B<>();
+        ad.addLast("A");
+        Iterator<String> it = ad.iterator();
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.next()).isEqualTo("A");
+        assertThat(it.hasNext()).isFalse();
+    }
+
+    @Test
+    public void testIteratorMultiple() {
+        ArrayDeque61B<Integer> ad = new ArrayDeque61B<>();
+        for (int i = 0; i < 5; i++) {
+            ad.addLast(i);
+        }
+        Iterator<Integer> it = ad.iterator();
+        for (int i = 0; i < 5; i++) {
+            assertThat(it.hasNext()).isTrue();
+            assertThat(it.next()).isEqualTo(i);
+        }
+        assertThat(it.hasNext()).isFalse();
+    }
+
+    @Test
+    public void testIteratorWrapAround() {
+        ArrayDeque61B<Integer> ad = new ArrayDeque61B<>();
+        for (int i = 0; i < 8; i++) ad.addLast(i);
+        for (int i = 0; i < 3; i++) ad.removeFirst();
+        ad.addLast(8);
+        ad.addLast(9);
+
+        Iterator<Integer> it = ad.iterator();
+        for (int expected = 3; expected <= 9; expected++) {
+            assertThat(it.hasNext()).isTrue();
+            assertThat(it.next()).isEqualTo(expected);
+        }
+        assertThat(it.hasNext()).isFalse();
+    }
+
+    // ----------------- equals Tests -----------------
+
+    @Test
+    public void testEqualsSelf() {
+        ArrayDeque61B<Integer> ad = new ArrayDeque61B<>();
+        assertThat(ad).isEqualTo(ad);
+    }
+
+    @Test
+    public void testEqualsNullAndDifferentType() {
+        ArrayDeque61B<Integer> ad = new ArrayDeque61B<>();
+        assertThat(ad).isNotEqualTo(null);
+        assertThat(ad).isNotEqualTo("not a deque");
+    }
+
+    @Test
+    public void testEqualsEmptyDeques() {
+        ArrayDeque61B<String> a = new ArrayDeque61B<>();
+        ArrayDeque61B<String> b = new ArrayDeque61B<>();
+        assertThat(a).isEqualTo(b);
+    }
+
+    @Test
+    public void testEqualsSameContent() {
+        ArrayDeque61B<Integer> a = new ArrayDeque61B<>();
+        ArrayDeque61B<Integer> b = new ArrayDeque61B<>();
+        for (int i = 0; i < 5; i++) {
+            a.addLast(i);
+            b.addLast(i);
+        }
+        assertThat(a).isEqualTo(b);
+        assertThat(b).isEqualTo(a);
+    }
+
+    @Test
+    public void testEqualsDifferentSize() {
+        ArrayDeque61B<Integer> a = new ArrayDeque61B<>();
+        ArrayDeque61B<Integer> b = new ArrayDeque61B<>();
+        a.addLast(1);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    public void testEqualsDifferentContent() {
+        ArrayDeque61B<Integer> a = new ArrayDeque61B<>();
+        ArrayDeque61B<Integer> b = new ArrayDeque61B<>();
+        a.addLast(1);
+        a.addLast(2);
+        b.addLast(1);
+        b.addLast(3);
+        assertThat(a).isNotEqualTo(b);
     }
 
 }
