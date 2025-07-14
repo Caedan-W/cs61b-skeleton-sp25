@@ -3,6 +3,8 @@ import deque.LinkedListDeque61B;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -175,6 +177,92 @@ public class LinkedListDeque61BTest {
         d.addLast(42);
         assertThat(d.removeFirst()).isEqualTo(42);
         assertThat(d.isEmpty()).isTrue();
+    }
+
+    // --------- Iterator Tests ---------
+
+    @Test
+    public void testIteratorEmpty() {
+        LinkedListDeque61B<Integer> lld = new LinkedListDeque61B<>();
+        Iterator<Integer> it = lld.iterator();
+        assertThat(it.hasNext()).isFalse();
+    }
+
+    @Test
+    public void testIteratorSingle() {
+        LinkedListDeque61B<String> lld = new LinkedListDeque61B<>();
+        lld.addLast("X");
+        Iterator<String> it = lld.iterator();
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.next()).isEqualTo("X");
+        assertThat(it.hasNext()).isFalse();
+    }
+
+    @Test
+    public void testIteratorMultiple() {
+        LinkedListDeque61B<Integer> lld = new LinkedListDeque61B<>();
+        for (int i = 0; i < 4; i++) {
+            lld.addLast(i);
+        }
+        Iterator<Integer> it = lld.iterator();
+        for (int i = 0; i < 4; i++) {
+            assertThat(it.hasNext()).isTrue();
+            assertThat(it.next()).isEqualTo(i);
+        }
+        assertThat(it.hasNext()).isFalse();
+    }
+
+    // --------- equals Tests ---------
+
+    @Test
+    public void testEqualsSelf() {
+        LinkedListDeque61B<Integer> lld = new LinkedListDeque61B<>();
+        assertThat(lld).isEqualTo(lld);
+    }
+
+    @Test
+    public void testEqualsNullOrDifferentType() {
+        LinkedListDeque61B<Integer> lld = new LinkedListDeque61B<>();
+        assertThat(lld).isNotEqualTo(null);
+        assertThat(lld).isNotEqualTo("string");
+    }
+
+    @Test
+    public void testEqualsEmptyDeques() {
+        LinkedListDeque61B<String> a = new LinkedListDeque61B<>();
+        LinkedListDeque61B<String> b = new LinkedListDeque61B<>();
+        assertThat(a).isEqualTo(b);
+    }
+
+    @Test
+    public void testEqualsSameContent() {
+        LinkedListDeque61B<Integer> a = new LinkedListDeque61B<>();
+        LinkedListDeque61B<Integer> b = new LinkedListDeque61B<>();
+        for (int i = 1; i <= 3; i++) {
+            a.addLast(i);
+            b.addLast(i);
+        }
+        assertThat(a).isEqualTo(b);
+        assertThat(b).isEqualTo(a);
+    }
+
+    @Test
+    public void testEqualsDifferentSize() {
+        LinkedListDeque61B<Integer> a = new LinkedListDeque61B<>();
+        LinkedListDeque61B<Integer> b = new LinkedListDeque61B<>();
+        a.addLast(1);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    public void testEqualsDifferentContent() {
+        LinkedListDeque61B<Integer> a = new LinkedListDeque61B<>();
+        LinkedListDeque61B<Integer> b = new LinkedListDeque61B<>();
+        a.addLast(1);
+        a.addLast(2);
+        b.addLast(1);
+        b.addLast(3);
+        assertThat(a).isNotEqualTo(b);
     }
 
 }
